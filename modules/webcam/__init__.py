@@ -8,6 +8,7 @@ def get_webcam():
 
     return capture
 
+
 def get_frame(capture):
     success, frame = capture.read()
 
