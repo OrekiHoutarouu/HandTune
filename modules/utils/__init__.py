@@ -9,7 +9,7 @@ def get_absolute_path(path):
     return os.path.join(root, path)
 
 
-def draw_landmarks_on_image(rgb_image, detection_result):
+def draw_landmarks_on_image(rgb_image, detection_result, volume):
     mp_connections = mediapipe.tasks.vision.HandLandmarksConnections
     mp_drawing = mediapipe.tasks.vision.drawing_utils
 
@@ -85,4 +85,49 @@ def draw_landmarks_on_image(rgb_image, detection_result):
             cv2.LINE_AA
         )
 
+    draw_volume_bar(volume, annotated_image)
+
     return annotated_image
+
+
+def draw_volume_bar(volume, annotated_image):
+    if volume is None:
+        return
+
+    # converter volume (0–100) para posição da barra
+    bar = numpy.interp(volume, [0, 100], [400, 150])
+
+    bar_color = (200, 200, 200)      # cinza claro
+    fill_color = (255, 200, 0)       # mesma cor que você usou no gesto
+
+    # borda da barra
+    cv2.rectangle(annotated_image, (50,150), (85,400), bar_color, 2)
+
+    # preenchimento
+    cv2.rectangle(annotated_image, (50,int(bar)), (85,400), fill_color, -1)
+
+    # texto do volume
+    label = f"{int(volume)}%"
+
+    # outline do texto (melhor legibilidade)
+    cv2.putText(
+        annotated_image,
+        label,
+        (35,430),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1,
+        (0,0,0),
+        4,
+        cv2.LINE_AA
+    )
+
+    cv2.putText(
+        annotated_image,
+        label,
+        (35,430),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1,
+        (255,255,255),
+        2,
+        cv2.LINE_AA
+    )
