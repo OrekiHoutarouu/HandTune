@@ -4,6 +4,13 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 def initialize_landmarker():
+    """
+    Initializes and returns a HandLandmarker instance.
+
+    Returns:
+        HandLandmarker: Initialized hand landmarker object.
+    """
+    
     model_path = get_absolute_path("models/hand_landmarker.task")
 
     base_options = mediapipe.tasks.BaseOptions
@@ -25,6 +32,17 @@ def initialize_landmarker():
 
 
 def get_results(frame_rgb, landmarker):
+    """
+    Detects hand landmarks in an RGB image using the provided landmarker.
+
+    Args:
+        frame_rgb (numpy.ndarray): Input image in RGB format.
+        landmarker (HandLandmarker): Initialized hand landmarker object.
+
+    Returns:
+        HandLandmarkerResult: Result containing detected hand landmarks.
+    """
+
     mediapipe_image = mediapipe.Image(image_format=mediapipe.ImageFormat.SRGB, data=frame_rgb)
     hand_landmarker_result = landmarker.detect(mediapipe_image)
 

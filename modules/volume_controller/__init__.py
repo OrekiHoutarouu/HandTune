@@ -4,6 +4,21 @@ from modules.utils import get_os
 system = get_os()
 
 def set_volume(volume, previous_volume):
+    """Sets the system volume to the specified level if it differs significantly from the previous value.
+
+    Args:
+        volume (float): The target volume level as a percentage (0-100).
+        previous_volume (float): The previous volume level as a percentage (0-100).
+
+    Returns:
+        bool: True if the volume was changed, False otherwise.
+    Notes:
+        - On Linux, uses 'pactl' to set the default sink volume.
+        - On macOS (Darwin), uses 'osascript' to set the output volume.
+        - On Windows, uses pycaw to set the master volume.
+        - If 'volume' is None or the change is less than 5%, the volume is not updated.
+    """
+
     if volume is None:
         return False
 

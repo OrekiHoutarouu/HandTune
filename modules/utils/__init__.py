@@ -5,16 +5,41 @@ import mediapipe
 import platform
 
 def get_absolute_path(path):
-    root = os.getcwd()
+    """Returns the absolute path for a given relative path.
 
+    Args:
+        path (str): Relative or non-absolute file path.
+
+    Returns:
+        str: Absolute file path.
+    """
+    
+    root = os.getcwd()
     return os.path.join(root, path)
 
 
 def get_os():
+    """Returns the name of the user's operating system.
+
+    Returns:
+        str: Name of the operating system (e.g., 'Windows', 'Linux', 'Darwin').
+    """
+
     return platform.system()
 
 
 def draw_landmarks_on_image(rgb_image, detection_result, volume):
+    """Draws hand landmarks, connections, handedness label, and a volume bar on an image.
+
+    Args:
+        rgb_image (numpy.ndarray): Input RGB image.
+        detection_result: Detection result object with hand landmarks and handedness.
+        volume (float): Calculated volume (0-100).
+
+    Returns:
+        numpy.ndarray: Annotated image with landmarks, labels, and volume bar.
+    """
+
     mp_connections = mediapipe.tasks.vision.HandLandmarksConnections
     mp_drawing = mediapipe.tasks.vision.drawing_utils
 
@@ -96,6 +121,13 @@ def draw_landmarks_on_image(rgb_image, detection_result, volume):
 
 
 def draw_volume_bar(volume, annotated_image):
+    """Draws a vertical volume bar and its label on the annotated image.
+
+    Args:
+        volume (float): Calculated volume (0-100).
+        annotated_image (numpy.ndarray): Image to draw the volume bar on.
+    """
+
     if volume is None:
         return
 
@@ -105,7 +137,6 @@ def draw_volume_bar(volume, annotated_image):
     fill_color = (255, 200, 0)   
 
     cv2.rectangle(annotated_image, (50,150), (85,400), bar_color, 2)
-
     cv2.rectangle(annotated_image, (50,int(bar)), (85,400), fill_color, -1)
 
     label = f"{int(volume)}%"
