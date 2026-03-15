@@ -94,22 +94,17 @@ def draw_volume_bar(volume, annotated_image):
     if volume is None:
         return
 
-    # converter volume (0–100) para posição da barra
     bar = numpy.interp(volume, [0, 100], [400, 150])
 
-    bar_color = (200, 200, 200)      # cinza claro
-    fill_color = (255, 200, 0)       # mesma cor que você usou no gesto
+    bar_color = (200, 200, 200)      
+    fill_color = (255, 200, 0)   
 
-    # borda da barra
     cv2.rectangle(annotated_image, (50,150), (85,400), bar_color, 2)
 
-    # preenchimento
     cv2.rectangle(annotated_image, (50,int(bar)), (85,400), fill_color, -1)
 
-    # texto do volume
     label = f"{int(volume)}%"
 
-    # outline do texto (melhor legibilidade)
     cv2.putText(
         annotated_image,
         label,
