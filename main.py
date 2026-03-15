@@ -1,5 +1,4 @@
 from modules import gesture, hand_tracker, utils, volume_controller, webcam
-import mediapipe
 import cv2
 
 capture = webcam.get_webcam()
@@ -15,7 +14,8 @@ while True:
     distance = gesture.calculate_distance(frame, results)
     volume = gesture.calculate_volume(distance)
 
-    previous_volume = volume_controller.change_volume(volume, previous_volume)
+    if volume_controller.set_volume(volume, previous_volume):
+        previous_volume = volume
 
     annotated_image = utils.draw_landmarks_on_image(frame_rgb, results, volume)
 

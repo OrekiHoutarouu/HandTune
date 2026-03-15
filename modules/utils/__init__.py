@@ -2,11 +2,16 @@ import os
 import numpy
 import cv2
 import mediapipe
+import platform
 
 def get_absolute_path(path):
     root = os.getcwd()
 
     return os.path.join(root, path)
+
+
+def get_os():
+    return platform.system()
 
 
 def draw_landmarks_on_image(rgb_image, detection_result, volume):
