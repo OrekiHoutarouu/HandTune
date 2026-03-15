@@ -2,6 +2,8 @@ from modules.utils import get_absolute_path
 import mediapipe
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+import sys
+import os
 
 def initialize_landmarker():
     """
@@ -11,7 +13,10 @@ def initialize_landmarker():
         HandLandmarker: Initialized hand landmarker object.
     """
     
-    model_path = get_absolute_path("models/hand_landmarker.task")
+    if hasattr(sys, '_MEIPASS'):
+        model_path = os.path.join(sys._MEIPASS, "models", "hand_landmarker.task")
+    else:
+        model_path = get_absolute_path("models/hand_landmarker.task")
 
     base_options = mediapipe.tasks.BaseOptions
     hand_landmarker = mediapipe.tasks.vision.HandLandmarker
