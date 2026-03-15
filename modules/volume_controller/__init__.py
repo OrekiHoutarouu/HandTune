@@ -3,6 +3,15 @@ from modules.utils import get_os
 
 system = get_os()
 
+if system == "Windows":
+    from ctypes import cast, POINTER
+    from comtypes import CLSCTX_ALL
+    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+    devices = AudioUtilities.GetSpeakers()
+
+    endpoint_volume = devices.EndpointVolume
+
 def set_volume(volume, previous_volume):
     """Sets the system volume to the specified level if it differs significantly from the previous value.
 
@@ -32,18 +41,6 @@ def set_volume(volume, previous_volume):
         os.system(f"osascript -e 'set volume output volume {volume}'")
 
     elif system == "Windows":
-        from ctypes import cast, POINTER
-        from comtypes import CLSCTX_ALL
-        from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-
-        devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(
-            IAudioEndpointVolume._iid_,
-            CLSCTX_ALL,
-            None
-        )
-
-        volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
-        volume_interface.SetMasterVolumeLevelScalar(volume/100, None)
+        endpoint_volume.SetMasterVolumeLevelScalar(volume / 100.0, None)
 
     return True
